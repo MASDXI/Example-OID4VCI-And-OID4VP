@@ -4,12 +4,12 @@ import { ConsoleLogger } from '@credo-ts/core';
 
 // Simple logger that disables the experimental module as it can get quite annoying with hot reloading
 export const appLogger = (logLevel: LogLevel) => {
-  const consoleLogger = new ConsoleLogger(logLevel);
+    const consoleLogger = new ConsoleLogger(logLevel);
 
-  consoleLogger.warn = (message: string, data?: Record<string, unknown>) => {
-    if (message.includes('module is experimental')) return;
-    new ConsoleLogger(logLevel).warn(message, data);
-  };
+    consoleLogger.warn = (message: string, data?: Record<string, unknown>) => {
+        if (message.includes('module is experimental')) return;
+        new ConsoleLogger(logLevel).warn(message, data);
+    };
 
-  return consoleLogger;
+    return consoleLogger;
 };

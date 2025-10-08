@@ -1,187 +1,174 @@
 import { ariesAskar } from '@hyperledger/aries-askar-nodejs';
 import type { DidKey } from '@credo-ts/core';
 import type {
-  OpenId4VcCredentialHolderBinding,
-  OpenId4VcCredentialHolderDidBinding,
-  OpenId4VciCredentialRequestToCredentialMapper,
-  OpenId4VciCredentialSupportedWithId,
-  OpenId4VcIssuerRecord,
+    OpenId4VcCredentialHolderBinding,
+    OpenId4VcCredentialHolderDidBinding,
+    OpenId4VciCredentialRequestToCredentialMapper,
+    OpenId4VciCredentialSupportedWithId,
+    OpenId4VcIssuerRecord,
 } from '@credo-ts/openid4vc';
 import { customRouterIssuer } from 'src/agent/customRoute';
 import { AskarModule } from '@credo-ts/askar';
 import {
-  ClaimFormat,
-  parseDid,
-  CredoError,
-  W3cCredential,
-  W3cCredentialSubject,
-  W3cIssuer,
-  w3cDate,
-  JwaSignatureAlgorithm,
+    ClaimFormat,
+    parseDid,
+    CredoError,
+    W3cCredential,
+    W3cCredentialSubject,
+    W3cIssuer,
+    w3cDate,
+    JwaSignatureAlgorithm,
 } from '@credo-ts/core';
-import {
-  OpenId4VcIssuerModule,
-  OpenId4VciCredentialFormatProfile,
-} from '@credo-ts/openid4vc';
+import { OpenId4VcIssuerModule, OpenId4VciCredentialFormatProfile } from '@credo-ts/openid4vc';
 import { BaseAgent } from './baseAgent';
 
 export const universityDegreeCredential = {
-  id: 'UniversityDegreeCredential',
-  format: OpenId4VciCredentialFormatProfile.JwtVcJson,
-  types: ['VerifiableCredential', 'UniversityDegreeCredential'],
+    id: 'UniversityDegreeCredential',
+    format: OpenId4VciCredentialFormatProfile.JwtVcJson,
+    types: ['VerifiableCredential', 'UniversityDegreeCredential'],
 } satisfies OpenId4VciCredentialSupportedWithId;
 
 export const universityDegreeCredentialSdJwt = {
-  id: 'UniversityDegreeCredential-sdjwt',
-  format: OpenId4VciCredentialFormatProfile.SdJwtVc,
-  vct: 'UniversityDegreeCredential',
-  cryptographic_binding_methods_supported: ['did:key'],
-  // cryptographic_suites_supported: [JwaSignatureAlgorithm.ES256],
+    id: 'UniversityDegreeCredential-sdjwt',
+    format: OpenId4VciCredentialFormatProfile.SdJwtVc,
+    vct: 'UniversityDegreeCredential',
+    cryptographic_binding_methods_supported: ['did:key'],
+    // cryptographic_suites_supported: [JwaSignatureAlgorithm.ES256],
 } satisfies OpenId4VciCredentialSupportedWithId;
 
 export const credentialsSupported = [
-  universityDegreeCredentialSdJwt,
-  universityDegreeCredential,
+    universityDegreeCredentialSdJwt,
+    universityDegreeCredential,
 ] satisfies OpenId4VciCredentialSupportedWithId[];
 
 function getCredentialRequestToCredentialMapper({
-  issuerDidKey,
+    issuerDidKey,
 }: {
-  issuerDidKey: DidKey;
+    issuerDidKey: DidKey;
 }): OpenId4VciCredentialRequestToCredentialMapper {
-  return async ({ holderBinding, credentialConfigurationIds }) => {
-    const credentialConfigurationId = credentialConfigurationIds[0];
+    return async ({ holderBinding, credentialConfigurationIds }) => {
+        const credentialConfigurationId = credentialConfigurationIds[0];
 
-    if (credentialConfigurationId === universityDegreeCredential.id) {
-      assertDidBasedHolderBinding(holderBinding);
+        if (credentialConfigurationId === universityDegreeCredential.id) {
+            assertDidBasedHolderBinding(holderBinding);
 
-      return {
-        credentialSupportedId: universityDegreeCredential.id,
-        format: ClaimFormat.JwtVc,
-        credential: new W3cCredential({
-          type: universityDegreeCredential.types,
-          issuer: new W3cIssuer({
-            id: issuerDidKey.did,
-          }),
-          credentialSubject: new W3cCredentialSubject({
-            id: parseDid(holderBinding.didUrl).did,
-          }),
-          issuanceDate: w3cDate(Date.now()),
-        }),
-        verificationMethod: `${issuerDidKey.did}#${issuerDidKey.key.fingerprint}`,
-      };
-    }
+            return {
+                credentialSupportedId: universityDegreeCredential.id,
+                format: ClaimFormat.JwtVc,
+                credential: new W3cCredential({
+                    type: universityDegreeCredential.types,
+                    issuer: new W3cIssuer({
+                        id: issuerDidKey.did,
+                    }),
+                    credentialSubject: new W3cCredentialSubject({
+                        id: parseDid(holderBinding.didUrl).did,
+                    }),
+                    issuanceDate: w3cDate(Date.now()),
+                }),
+                verificationMethod: `${issuerDidKey.did}#${issuerDidKey.key.fingerprint}`,
+            };
+        }
 
-    if (credentialConfigurationId === universityDegreeCredentialSdJwt.id) {
-      return {
-        credentialSupportedId: universityDegreeCredentialSdJwt.id,
-        format: ClaimFormat.SdJwtVc,
-        payload: {
-          vct: universityDegreeCredentialSdJwt.vct,
-          university: 'University of the Thai Chamber of Commerce',
-          degree: 'Bachelor',
-          fullName: 'John Doe',
-          gpa: '2.56',
-        },
+        if (credentialConfigurationId === universityDegreeCredentialSdJwt.id) {
+            return {
+                credentialSupportedId: universityDegreeCredentialSdJwt.id,
+                format: ClaimFormat.SdJwtVc,
+                payload: {
+                    vct: universityDegreeCredentialSdJwt.vct,
+                    university: 'University of the Thai Chamber of Commerce',
+                    degree: 'Bachelor',
+                    fullName: 'John Doe',
+                    gpa: '2.56',
+                },
 
-        holder: holderBinding,
-        issuer: {
-          method: 'did',
-          didUrl: `${issuerDidKey.did}#${issuerDidKey.key.fingerprint}`,
-        },
-        disclosureFrame: { _sd: ['degree', 'university', 'fullName'] },
-      };
-    }
+                holder: holderBinding,
+                issuer: {
+                    method: 'did',
+                    didUrl: `${issuerDidKey.did}#${issuerDidKey.key.fingerprint}`,
+                },
+                disclosureFrame: { _sd: ['degree', 'university', 'fullName'] },
+            };
+        }
 
-    throw new Error('Invalid request');
-  };
+        throw new Error('Invalid request');
+    };
 }
 
 export class Issuer extends BaseAgent<{
-  askar: AskarModule;
-  openId4VcIssuer: OpenId4VcIssuerModule;
+    askar: AskarModule;
+    openId4VcIssuer: OpenId4VcIssuerModule;
 }> {
-  public issuerRecord!: OpenId4VcIssuerRecord;
+    public issuerRecord!: OpenId4VcIssuerRecord;
 
-  public constructor(port: number, name: string) {
-    super({
-      port,
-      name,
-      privateKey: 'ISSUER_PRIVATE_KEY', // Issuer private key
-      modules: {
-        askar: new AskarModule({ ariesAskar }),
-        openId4VcIssuer: new OpenId4VcIssuerModule({
-          baseUrl: `http://172.27.224.176:${port}/issuer/oid4vci`,
-          router: customRouterIssuer,
-          endpoints: {
-            credential: {
-              credentialRequestToCredentialMapper: (...args) =>
-                getCredentialRequestToCredentialMapper({
-                  issuerDidKey: this.didKey,
-                })(...args),
+    public constructor(port: number, name: string) {
+        super({
+            port,
+            name,
+            privateKey: 'ISSUER_PRIVATE_KEY', // Issuer private key
+            modules: {
+                askar: new AskarModule({ ariesAskar }),
+                openId4VcIssuer: new OpenId4VcIssuerModule({
+                    baseUrl: `http://172.27.224.176:${port}/issuer/oid4vci`,
+                    router: customRouterIssuer,
+                    endpoints: {
+                        credential: {
+                            credentialRequestToCredentialMapper: (...args) =>
+                                getCredentialRequestToCredentialMapper({
+                                    issuerDidKey: this.didKey,
+                                })(...args),
+                        },
+                    },
+                }),
             },
-          },
-        }),
-      },
-    });
-  }
+        });
+    }
 
-  public static async build(port: number): Promise<Issuer> {
-    const issuer = new Issuer(
-      port,
-      'OpenId4VcIssuer ' + Math.random().toString(),
-    );
+    public static async build(port: number): Promise<Issuer> {
+        const issuer = new Issuer(port, 'OpenId4VcIssuer ' + Math.random().toString());
 
-    await issuer.initializeAgent();
-    issuer.issuerRecord =
-      await issuer.agent.modules.openId4VcIssuer.createIssuer({
-        display: [
-          {
-            name: 'University of the Thai Chamber of Commerce Diploma',
-            description:
-              'University of the Thai Chamber of Commerce Diploma is given to all student that graduated form university',
-            text_color: '#000000',
-            background_color: '#FFFFFF',
-            logo: {
-              url: "",
-              alt_text: "logo img"
+        await issuer.initializeAgent();
+        issuer.issuerRecord = await issuer.agent.modules.openId4VcIssuer.createIssuer({
+            display: [
+                {
+                    name: 'University of the Thai Chamber of Commerce Diploma',
+                    description:
+                        'University of the Thai Chamber of Commerce Diploma is given to all student that graduated form university',
+                    text_color: '#000000',
+                    background_color: '#FFFFFF',
+                    logo: {
+                        url: '',
+                        alt_text: 'logo img',
+                    },
+                    background_image: {
+                        url: '',
+                        alt_text: 'background img',
+                    },
+                },
+            ],
+            credentialsSupported,
+        });
+
+        return issuer;
+    }
+
+    public async createCredentialOffer(offeredCredentials: string[], userInformation: any) {
+        const { credentialOffer } = await this.agent.modules.openId4VcIssuer.createCredentialOffer({
+            issuerId: this.issuerRecord.issuerId,
+            offeredCredentials,
+            preAuthorizedCodeFlowConfig: { userPinRequired: false },
+            issuanceMetadata: {
+                ...userInformation,
             },
-            background_image: {
-              url: "",
-              alt_text: "background img"
-            }
-          },
-        ],
-        credentialsSupported,
-      });
+        });
 
-    return issuer;
-  }
-
-  public async createCredentialOffer(
-    offeredCredentials: string[],
-    userInformation: any,
-  ) {
-    const { credentialOffer } =
-      await this.agent.modules.openId4VcIssuer.createCredentialOffer({
-        issuerId: this.issuerRecord.issuerId,
-        offeredCredentials,
-        preAuthorizedCodeFlowConfig: { userPinRequired: false },
-        issuanceMetadata: {
-          ...userInformation,
-        },
-      });
-
-    return credentialOffer;
-  }
+        return credentialOffer;
+    }
 }
 
 function assertDidBasedHolderBinding(
-  holderBinding: OpenId4VcCredentialHolderBinding,
+    holderBinding: OpenId4VcCredentialHolderBinding,
 ): asserts holderBinding is OpenId4VcCredentialHolderDidBinding {
-  if (holderBinding.method !== 'did') {
-    throw new CredoError(
-      'Only did based holder bindings supported for this credential type',
-    );
-  }
+    if (holderBinding.method !== 'did') {
+        throw new CredoError('Only did based holder bindings supported for this credential type');
+    }
 }

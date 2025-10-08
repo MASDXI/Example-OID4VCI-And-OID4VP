@@ -5,12 +5,12 @@ import { ConfigModule } from '@nestjs/config';
 import { customRouterIssuer } from '../agent/customRoute';
 
 @Module({
-  controllers: [IssuerController],
-  providers: [IssuerService],
-  imports: [ConfigModule],
+    controllers: [IssuerController],
+    providers: [IssuerService],
+    imports: [ConfigModule],
 })
 export class IssuerModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(customRouterIssuer).forRoutes('issuer/oid4vci');
-  }
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(customRouterIssuer).forRoutes('issuer/oid4vci');
+    }
 }

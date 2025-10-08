@@ -8,16 +8,16 @@ import { VerifierModule } from './verifier/verifier.module';
 import configuration from './config/configuration';
 
 @Module({
-  imports: [
-    IssuerModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configuration],
-    }),
-    HolderModule,
-    VerifierModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        IssuerModule,
+        ConfigModule.forRoot({
+            isGlobal: true,
+            load: [configuration],
+        }),
+        HolderModule,
+        VerifierModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

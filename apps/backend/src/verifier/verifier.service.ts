@@ -4,21 +4,19 @@ import { presentationDefinitions, Verifier } from 'src/agent/verifier';
 
 @Injectable()
 export class VerifierService {
-  constructor(private configService: ConfigService) {}
+    constructor(private configService: ConfigService) {}
 
-  private verifier: Verifier;
+    private verifier: Verifier;
 
-  async onModuleInit() {
-    const PORT = this.configService.get<number>('port');
-    this.verifier = await Verifier.build(PORT);
-    console.info('Verifier Build Success');
-  }
+    async onModuleInit() {
+        const PORT = this.configService.get<number>('port');
+        this.verifier = await Verifier.build(PORT);
+        console.info('Verifier Build Success');
+    }
 
-  async createProofRequest(id: string) {
-    const presentationDefinition = presentationDefinitions.find(
-      (p) => p.id === id,
-    );
+    async createProofRequest(id: string) {
+        const presentationDefinition = presentationDefinitions.find((p) => p.id === id);
 
-    return this.verifier.createProofRequest(presentationDefinition);
-  }
+        return this.verifier.createProofRequest(presentationDefinition);
+    }
 }

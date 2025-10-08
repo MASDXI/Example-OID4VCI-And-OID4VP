@@ -4,39 +4,39 @@ import { SiweMessage } from 'siwe';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) {}
 
-  async signIn(message: string, signature: string, domain: string) {
-    const siwe = new SiweMessage(JSON.parse(message || '{}'));
+    async signIn(message: string, signature: string, domain: string) {
+        const siwe = new SiweMessage(JSON.parse(message || '{}'));
 
-    const result = await siwe.verify({
-      signature: signature || "",
-      domain,
-    });
+        const result = await siwe.verify({
+            signature: signature || '',
+            domain,
+        });
 
-    console.log(result.success);
+        console.log(result.success);
 
-    if (result.success) {
-      console.log("verify");
-      const holder = await this.prisma.holder.findUnique({
-        where: { id: siwe.address },
-      });
-      
-      if (holder) {
-        return holder.address;
-      }
+        if (result.success) {
+            console.log('verify');
+            const holder = await this.prisma.holder.findUnique({
+                where: { id: siwe.address },
+            });
 
-      const newHolder = await this.prisma.holder.create({
-        data: {
-          id: siwe.address,
-          address: siwe.address,
-        },
-      });
-      console.log(newHolder.address);
+            if (holder) {
+                return holder.address;
+            }
 
-      return newHolder.address;
+            const newHolder = await this.prisma.holder.create({
+                data: {
+                    id: siwe.address,
+                    address: siwe.address,
+                },
+            });
+            console.log(newHolder.address);
+
+            return newHolder.address;
+        }
+
+        return null;
     }
-
-    return null;
-  }
 }
