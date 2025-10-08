@@ -22,7 +22,7 @@ const useLogin = () => {
         },
         body: JSON.stringify(requestData),
       });
-
+      console.log({ISSUER_URL});
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("user_id", data.id);

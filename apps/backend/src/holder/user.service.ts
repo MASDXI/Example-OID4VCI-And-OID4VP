@@ -10,15 +10,18 @@ export class UserService {
     const siwe = new SiweMessage(JSON.parse(message || '{}'));
 
     const result = await siwe.verify({
-      signature: signature || '',
+      signature: signature || "",
       domain,
     });
 
+    console.log(result.success);
+
     if (result.success) {
+      console.log("verify");
       const holder = await this.prisma.holder.findUnique({
         where: { id: siwe.address },
       });
-
+      
       if (holder) {
         return holder.address;
       }
@@ -29,6 +32,7 @@ export class UserService {
           address: siwe.address,
         },
       });
+      console.log(newHolder.address);
 
       return newHolder.address;
     }

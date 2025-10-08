@@ -7,7 +7,7 @@ import type {
   OpenId4VciCredentialSupportedWithId,
   OpenId4VcIssuerRecord,
 } from '@credo-ts/openid4vc';
-import { customRouterIsuer } from 'src/agent/customRoute';
+import { customRouterIssuer } from 'src/agent/customRoute';
 import { AskarModule } from '@credo-ts/askar';
 import {
   ClaimFormat,
@@ -17,6 +17,7 @@ import {
   W3cCredentialSubject,
   W3cIssuer,
   w3cDate,
+  JwaSignatureAlgorithm,
 } from '@credo-ts/core';
 import {
   OpenId4VcIssuerModule,
@@ -34,6 +35,8 @@ export const universityDegreeCredentialSdJwt = {
   id: 'UniversityDegreeCredential-sdjwt',
   format: OpenId4VciCredentialFormatProfile.SdJwtVc,
   vct: 'UniversityDegreeCredential',
+  cryptographic_binding_methods_supported: ['did:key'],
+  // cryptographic_suites_supported: [JwaSignatureAlgorithm.ES256],
 } satisfies OpenId4VciCredentialSupportedWithId;
 
 export const credentialsSupported = [
@@ -75,9 +78,10 @@ function getCredentialRequestToCredentialMapper({
         format: ClaimFormat.SdJwtVc,
         payload: {
           vct: universityDegreeCredentialSdJwt.vct,
-          university: 'Standing University',
-          degree: 'bachelor',
-          fullName: 'Steve Rogers',
+          university: 'University of the Thai Chamber of Commerce',
+          degree: 'Bachelor',
+          fullName: 'John Doe',
+          gpa: '2.56',
         },
 
         holder: holderBinding,
@@ -107,8 +111,8 @@ export class Issuer extends BaseAgent<{
       modules: {
         askar: new AskarModule({ ariesAskar }),
         openId4VcIssuer: new OpenId4VcIssuerModule({
-          baseUrl: `http://localhost:${port}/issuer/oid4vci`,
-          router: customRouterIsuer,
+          baseUrl: `http://172.27.224.176:${port}/issuer/oid4vci`,
+          router: customRouterIssuer,
           endpoints: {
             credential: {
               credentialRequestToCredentialMapper: (...args) =>
@@ -133,11 +137,19 @@ export class Issuer extends BaseAgent<{
       await issuer.agent.modules.openId4VcIssuer.createIssuer({
         display: [
           {
-            name: 'Standing University',
+            name: 'University of the Thai Chamber of Commerce Diploma',
             description:
-              'Standing University. is a university that provides the best student.',
+              'University of the Thai Chamber of Commerce Diploma is given to all student that graduated form university',
             text_color: '#000000',
             background_color: '#FFFFFF',
+            logo: {
+              url: "",
+              alt_text: "logo img"
+            },
+            background_image: {
+              url: "",
+              alt_text: "background img"
+            }
           },
         ],
         credentialsSupported,
