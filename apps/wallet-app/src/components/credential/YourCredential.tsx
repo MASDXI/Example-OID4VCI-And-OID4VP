@@ -34,7 +34,7 @@ export const YourCredential = ({ id }: Props) => {
           <span className="font-bold">Name:</span> {credential.fullName}
         </p>
         <p className="px-5 font-extralight font-sans break-all">
-          <span className="font-bold">GPA:</span> {credential.gpa}
+          <span className="font-bold">Cum. GPA:</span> {credential.cgpa}
         </p>
       </div>
 

@@ -1,24 +1,54 @@
 "use client";
 import { useQRCode } from "next-qrcode";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAddressCard } from "@fortawesome/free-solid-svg-icons";
 import { User } from "../hooks/useGetUser";
 import useGetVC from "../hooks/useGetVC";
 import { decodeOpenIDUrl } from "@/app/lib/decodeOpenIDUrl";
 import { NavBar } from "./NavBar";
 
 export const Profile: React.FC<User> = (props: User) => {
-  const { name, faculty, major, status, gpa } = props;
+  const { username, name, faculty, major, status, cgpa } = props;
   const { vc, handleRequestVc } = useGetVC();
   const { Canvas } = useQRCode();
 
   return (
     <div>
       <NavBar />
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br px-10">
-        <div className="relative w-full group max-w-md min-w-0 mx-auto mt-6 mb-6 break-words bg-slate-100 border shadow-2xl md:max-w-sm rounded-xl">
+      <div>
+        {/* TODO Profile information banner */}
+        <h1 className="text-xl text-black text-center mt-6">
+          Online Request Form System
+        </h1>
+      </div>
+      <div className="flex items-center justify-center">
+        <div className="flex flex-wrap justify-center items-stretch gap-6 mt-6">
+          <button className="bg-white border shadow-md hover:shadow-lg rounded-xl px-4 py-6 text-xs text-gray-800 hover:bg-gray-100 flex flex-col items-center justify-center gap-2 w-48 h-48">
+            <FontAwesomeIcon
+              size="2x"
+              icon={faAddressCard}
+              className="text-red-500"
+            />
+            <span className="text-center">Mock Card #0</span>
+          </button>
+
+          <button className="bg-white border shadow-md hover:shadow-lg rounded-xl px-4 py-6 text-xs text-gray-800 hover:bg-gray-100 flex flex-col items-center justify-center gap-2 w-48 h-48">
+            <FontAwesomeIcon
+              size="2x"
+              icon={faAddressCard}
+              className="text-red-500"
+            />
+            <span className="text-center">Digital Degree Certificate</span>
+          </button>
+
+          {/* TODO Add more buttons here */}
+        </div>
+        {/* <div className="relative w-full group max-w-md min-w-0 mx-auto mt-6 mb-6 break-words bg-slate-100 border shadow-2xl md:max-w-sm rounded-xl">
           <div className="pb-6">
             <div className="mt-2 md:mt-10 text-center">
               <h3 className="mb-1 text-2xl font-bold leading-normal text-black ">
                 {name}
+                {username}
               </h3>
               <div className="flex flex-row justify-center w-full mx-auto space-x-2 text-center">
                 <div className="text-sm font-bold tracking-wide text-gray-600  font-mono md:text-xl">
@@ -33,7 +63,7 @@ export const Profile: React.FC<User> = (props: User) => {
                     <span className="font-bold">Status</span> : {status}
                   </p>
                   <p className="mb-4 font-light leading-relaxed text-black ">
-                    <span className="font-bold"> GPA</span> : {gpa}
+                    <span className="font-bold">Cum. GPA</span> : {cgpa}
                   </p>
                 </div>
               </div>
@@ -76,7 +106,7 @@ export const Profile: React.FC<User> = (props: User) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

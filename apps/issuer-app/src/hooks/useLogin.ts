@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const useLogin = () => {
-  const [email, setEmail] = useState<string>("");
+  const [studentId, setStudentId] = useState<number>();
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const ISSUER_URL = process.env.NEXT_PUBLIC_ISSUER_URL!;
@@ -10,7 +10,7 @@ const useLogin = () => {
     event.preventDefault();
 
     const requestData = {
-      email: email,
+      studentId: studentId,
       password: password,
     };
 
@@ -37,8 +37,8 @@ const useLogin = () => {
   };
 
   return {
-    email,
-    setEmail,
+    studentId,
+    setStudentId,
     password,
     setPassword,
     handleLogin,

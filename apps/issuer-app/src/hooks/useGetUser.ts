@@ -8,7 +8,7 @@ export interface User {
   faculty: string;
   major: string;
   status: string;
-  gpa: number;
+  cgpa: number;
 }
 
 const useGetUser = () => {

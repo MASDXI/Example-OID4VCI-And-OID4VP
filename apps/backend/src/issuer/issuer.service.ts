@@ -23,8 +23,8 @@ export class IssuerService {
         }
     }
 
-    async validateUser(email: string, password: string) {
-        if (mockUser.username === email && mockUser.password === password) {
+    async validateUser(studentId: number, password: string) {
+        if (Number(mockUser.username) === studentId && mockUser.password === password) {
             return mockUser;
         } else {
             throw new UnauthorizedException('Invalid email or password');

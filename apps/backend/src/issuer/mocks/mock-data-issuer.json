@@ -1,10 +1,10 @@
 {
   "id": "83314404-b3ee-48ec-9d7a-a413513b190b",
-  "username": "roger@school.com",
-  "password": "1234",
+  "username": 22000111222333,
+  "password": "password",
   "name": "John Doe",
   "faculty": "School of Engineering",
-  "major": "Information Technology",
+  "major": "Computer Engineering and Multi Media",
   "status": "Graduated",
-  "gpa": 2.56
+  "cgpa": 2.56
 }

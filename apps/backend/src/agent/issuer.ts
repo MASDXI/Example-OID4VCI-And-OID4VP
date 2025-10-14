@@ -78,7 +78,7 @@ function getCredentialRequestToCredentialMapper({
                     university: 'University of the Thai Chamber of Commerce',
                     degree: 'Bachelor',
                     fullName: 'John Doe',
-                    gpa: '2.56',
+                    cgpa: '2.56',
                 },
 
                 holder: holderBinding,

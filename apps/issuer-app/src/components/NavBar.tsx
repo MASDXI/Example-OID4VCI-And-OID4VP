@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const NavBar = () => {
   const handleLogOut = () => {
@@ -9,23 +11,17 @@ export const NavBar = () => {
   };
 
   return (
-    <div className="bg-gray-900">
+    <div className="bg-white">
       <div className="container mx-auto flex h-16 items-center justify-between gap-8 px-6">
-        <Link className="block text-[rgb(255,120,90)]" href={"/"}>
-          <p className="font-bold text-xl">
-            Issuer <span className="text-white">VC</span>
-          </p>
+        <Link className="block" href={"/"}>
+          <p className="font-light text-xl text-gray-400">Document request system</p>
         </Link>
         <div className="flex items-center justify-end">
           <div className="flex items-center gap-4">
-            <div className="sm:flex">
-              <button
-                className="block rounded-md bg-[#FF5733] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#fa9e89]"
-                onClick={handleLogOut}
-              >
-                Logout
-              </button>
-            </div>
+            <button>
+              <span className="font-light text-gray-400 px-4">Log out</span>
+              <FontAwesomeIcon icon={faSignOutAlt} className="text-red-500" onClick={handleLogOut} />
+            </button>
 
             <button className="block rounded p-2.5 transition md:hidden bg-gray-800 text-white hover:text-white/75">
               <span className="sr-only">Toggle menu</span>

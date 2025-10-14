@@ -99,7 +99,7 @@ export const YourCredentials = () => {
                     id={cre.id}
                     fullName={cre.fullName}
                     university={cre.university}
-                    gpa={cre.gpa}
+                    cgpa={cre.cgpa}
                   />
                 </div>
               );

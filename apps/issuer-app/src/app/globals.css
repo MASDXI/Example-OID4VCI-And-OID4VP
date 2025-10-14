@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+.bgonlinenewrequest {
+    background: rgb(32,48,153);
+    background: linear-gradient(180deg, rgba(32,48,153,1) 0%, rgba(28,108,204,1) 27%, rgba(23,167,255,1) 70%);
+}

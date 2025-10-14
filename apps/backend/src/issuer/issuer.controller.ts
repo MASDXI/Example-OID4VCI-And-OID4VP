@@ -17,10 +17,10 @@ export class IssuerController {
 
     @Post('login')
     async login(@Body() body, @Res() res) {
-        const { email, password } = body;
+        const { studentId, password } = body;
 
         try {
-            const user = await this.issuerService.validateUser(email, password);
+            const user = await this.issuerService.validateUser(studentId, password);
             return res.status(HttpStatus.OK).json({ ...user });
         } catch (error) {
             if (error instanceof UnauthorizedException) {
