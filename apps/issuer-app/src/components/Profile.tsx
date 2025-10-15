@@ -1,14 +1,20 @@
 "use client";
 import { useQRCode } from "next-qrcode";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAddressCard } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAddressCard,
+  faFileCode,
+  faFileSignature,
+  faHistory,
+  faUserGraduate,
+} from "@fortawesome/free-solid-svg-icons";
 import { User } from "../hooks/useGetUser";
 import useGetVC from "../hooks/useGetVC";
 import { decodeOpenIDUrl } from "@/app/lib/decodeOpenIDUrl";
 import { NavBar } from "./NavBar";
+import { CardButton } from "./CardButton";
 
 export const Profile: React.FC<User> = (props: User) => {
-  const { username, name, faculty, major, status, cgpa } = props;
+  const { username, name, faculty, major } = props;
   const { vc, handleRequestVc } = useGetVC();
   const { Canvas } = useQRCode();
 
@@ -16,32 +22,62 @@ export const Profile: React.FC<User> = (props: User) => {
     <div>
       <NavBar />
       <div>
-        {/* TODO Profile information banner */}
+        <div className="flex flex-col items-start justify-start px-4 py-[15px] pl-16 bg-blue-400">
+          <div className="row mb-2 mt-2">
+            <div className="col-sm-6 text-xld text-white">{username}</div>
+          </div>
+          <div className="row mb-2">
+            <div className="col-sm-6 text-xl text-white">{name}</div>
+          </div>
+          <div className="row mb-2">
+            <div className="col-sm-6 font-light text-white">{faculty}</div>
+          </div>
+          <div className="row mb-2 mt-[-6]">
+            <div className="col-sm-6 font-light text-white">{major}</div>
+          </div>
+        </div>
         <h1 className="text-xl text-black text-center mt-6">
-          Online Request Form System
+          Online Request Form
         </h1>
       </div>
       <div className="flex items-center justify-center">
         <div className="flex flex-wrap justify-center items-stretch gap-6 mt-6">
-          <button className="bg-white border shadow-md hover:shadow-lg rounded-xl px-4 py-6 text-xs text-gray-800 hover:bg-gray-100 flex flex-col items-center justify-center gap-2 w-48 h-48">
-            <FontAwesomeIcon
-              size="2x"
-              icon={faAddressCard}
-              className="text-red-500"
-            />
-            <span className="text-center">Mock Card #0</span>
-          </button>
-
-          <button className="bg-white border shadow-md hover:shadow-lg rounded-xl px-4 py-6 text-xs text-gray-800 hover:bg-gray-100 flex flex-col items-center justify-center gap-2 w-48 h-48">
-            <FontAwesomeIcon
-              size="2x"
-              icon={faAddressCard}
-              className="text-red-500"
-            />
-            <span className="text-center">Digital Degree Certificate</span>
-          </button>
-
-          {/* TODO Add more buttons here */}
+          <CardButton
+            iconColor="text-orange-500"
+            icon={faHistory}
+            label={"History"}
+          ></CardButton>
+          <CardButton
+            iconColor="text-red-500"
+            icon={faAddressCard}
+            label={"Degree Certificate"}
+          ></CardButton>
+          <CardButton
+            iconColor="text-green-500"
+            icon={faFileSignature}
+            label={"Transcript"}
+          ></CardButton>
+          <CardButton
+            iconColor="text-blue-500"
+            icon={faFileCode}
+            label={"Digital Degree Certificate PDF"}
+          ></CardButton>
+          {/* TODO onClick */}
+          <CardButton
+            iconColor="text-red-500"
+            icon={faAddressCard}
+            label={"Digital Degree Certificate VC"}
+          ></CardButton>
+          <CardButton
+            iconColor="text-purple-500"
+            icon={faFileSignature}
+            label={"Digital Transcript PDF"}
+          ></CardButton>
+          <CardButton
+            iconColor="text-blue-500"
+            icon={faUserGraduate}
+            label={"Expected Graduation Request"}
+          ></CardButton>
         </div>
         {/* <div className="relative w-full group max-w-md min-w-0 mx-auto mt-6 mb-6 break-words bg-slate-100 border shadow-2xl md:max-w-sm rounded-xl">
           <div className="pb-6">
