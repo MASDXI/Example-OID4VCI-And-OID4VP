@@ -184,4 +184,8 @@ export class HolderService {
             }
         }
     }
+
+    async resolveProofRequest(proofRequest: string) {
+        return await this.holder.resolveProofRequest(proofRequest);
+    }
 }

@@ -9,6 +9,21 @@ export class HolderController {
         private readonly userService: UserService,
     ) {}
 
+    @Post('resolve-proof-request')
+    async resolveProofRequest(@Body() body, @Res() res) {
+        const { proofRequest } = body;
+        try {
+            const data = await this.holderService.resolveProofRequest(proofRequest);
+            return res.status(HttpStatus.OK).json(data);
+        } catch (error) {
+            console.log(error);
+            if (error instanceof NotFoundException) {
+                return res.status(HttpStatus.NOT_FOUND).json({ message: 'NotFoundException' });
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'INTERNAL_SERVER_ERROR' });
+        }
+    }
+
     @Post('resolve-credential-offer')
     async resolveCredentialOffer(@Body() body, @Res() res) {
         const { payload, address } = body;
