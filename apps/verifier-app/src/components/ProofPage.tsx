@@ -1,59 +1,81 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useQRCode } from "next-qrcode";
 import { decodeOpenIDUrl } from "@/app/lib/decodeOpenIDUrl";
 import { NavBar } from "./NavBar";
 import useGetProof from "../hooks/useGetProof";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
 
 export const ProofPage: React.FC = () => {
   const { proof, handleRequestProof } = useGetProof();
   const { Canvas } = useQRCode();
+  const [copied, setCopied] = useState(false);
+
+  const companyName = "XYZ Corporation";
+
+  // Auto-call on page refresh / mount
+  useEffect(() => {
+    handleRequestProof();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleCopy = () => {
+    if (proof) {
+      navigator.clipboard.writeText(decodeOpenIDUrl(proof));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <NavBar />
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br px-10">
-        <div className="relative w-full group max-w-md min-w-0 mx-auto mt-6 mb-6 break-words bg-slate-100 border shadow-2xl md:max-w-sm rounded-xl">
-          <div className="pb-6">
-            <div className="pt-6 mx-6 mt-6 text-center border-t border-gray-200">
-              {proof && (
-                <div className="flex flex-col items-center gap-5">
-                  <Canvas
-                    text={proof}
-                    options={{
-                      errorCorrectionLevel: "M",
-                      margin: 3,
-                      scale: 4,
-                      width: 200,
-                      color: {
-                        dark: "#010599FF",
-                        light: "#FFBF60FF",
-                      },
-                    }}
-                  />
-                  <div className="w-full border overflow-x-auto px-5 py-2 rounded-lg text-wrap">
-                    <p className="text-black break-words text-sm ">
-                      {decodeOpenIDUrl(proof)}
-                    </p>
-                  </div>
-                </div>
-              )}
-              <button
-                onClick={handleRequestProof}
-                className="text-black border-2 border-black rounded-lg px-10 py-2 mt-5 hover:bg-slate-100"
+      <div className="flex flex-1 items-center justify-center bg-gradient-to-br p-4">
+        <div className="w-full max-w-md border bg-white rounded-xl shadow-lg p-6 flex flex-col items-center">
+          
+          {/* Company request text */}
+          <p className="text-center text-gray-700 text-sm mb-6">
+            You have a VC presentation request from{" "}
+            <span className="font-semibold">{companyName}</span> requiring
+            proof of your graduation degree.
+          </p>
+
+          {/* QR Code */}
+          {proof ? (
+            <div className="flex flex-col items-center gap-5 w-full">
+              <Canvas
+                text={proof}
+                options={{
+                  errorCorrectionLevel: "Q",
+                  margin: 3,
+                  scale: 4,
+                  width: 180,
+                }}
+              />
+
+              {/* Copyable decoded proof */}
+              <div
+                className="w-full relative border rounded-lg px-4 py-2 text-center break-words cursor-pointer hover:bg-gray-100 transition flex items-center justify-center gap-2"
+                onClick={handleCopy}
               >
-                Request Proof
-              </button>
-            </div>
-            <div className="relative h-6 overflow-hidden translate-y-6 rounded-b-xl">
-              <div className="absolute flex -space-x-12 rounded-b-2xl">
-                <div className="w-36 h-8 transition-colors duration-200 delay-75 transform skew-x-[35deg] bg-amber-400/90 group-hover:bg-amber-600/90 z-10"></div>
-                <div className="w-28 h-8 transition-colors duration-200 delay-100 transform skew-x-[35deg] bg-amber-300/90 group-hover:bg-amber-500/90 z-20"></div>
-                <div className="w-28 h-8 transition-colors duration-200 delay-150 transform skew-x-[35deg] bg-amber-200/90 group-hover:bg-amber-400/90 z-30"></div>
-                <div className="w-28 h-8 transition-colors duration-200 delay-200 transform skew-x-[35deg] bg-amber-100/90 group-hover:bg-amber-300/90 z-40"></div>
-                <div className="w-28 h-8 transition-colors duration-200 delay-300 transform skew-x-[35deg] bg-amber-50/90 group-hover:bg-amber-200/90 z-50"></div>
+                <p className="text-black text-xs font-light truncate">
+                  {decodeOpenIDUrl(proof)}
+                </p>
+                <FontAwesomeIcon
+                  icon={faCopy}
+                  className="text-gray-400 text-sm"
+                />
+                {copied && (
+                  <span className="absolute top-1 right-2 text-green-500 text-xs">
+                    Copied!
+                  </span>
+                )}
               </div>
             </div>
-          </div>
+          ) : (
+            <p className="text-gray-500 text-sm mt-4">Generating proof...</p>
+          )}
         </div>
       </div>
     </div>
