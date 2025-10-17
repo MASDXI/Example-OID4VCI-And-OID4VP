@@ -10,7 +10,7 @@ export const NavBar = () => {
         <Link className="block text-white" href={"/"}>
           <span className="sr-only">Home</span>
           <p className="font-bold text-xl">
-            JustKept
+            Docs
           </p>
         </Link>
 
