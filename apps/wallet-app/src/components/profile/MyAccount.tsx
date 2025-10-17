@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
+// TODO: change from siwe to credentials based auth
+
 export const MyAccount = () => {
   const { data } = useSession();
   const address = data?.user?.name; // TODO: Replace the key name 'name' with 'address' in the data object

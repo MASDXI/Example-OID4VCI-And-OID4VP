@@ -7,10 +7,10 @@ export const NavBar = () => {
   return (
     <div className="bg-gray-900">
       <div className="container mx-auto flex h-16 items-center gap-8 px-6">
-        <Link className="block text-[rgb(255,120,90)]" href={"/"}>
+        <Link className="block text-white" href={"/"}>
           <span className="sr-only">Home</span>
           <p className="font-bold text-xl">
-            Digital <span className="text-white">Wallet</span>
+            JustKept
           </p>
         </Link>
 
@@ -29,18 +29,9 @@ export const NavBar = () => {
               <li>
                 <a
                   className="transition text-white hover:text-white/75"
-                  href="#"
+                  href="/proving"
                 >
-                  DIDs
-                </a>
-              </li>
-
-              <li>
-                <a
-                  className="transition text-white hover:text-white/75"
-                  href="#"
-                >
-                  Keys
+                  Proving
                 </a>
               </li>
             </ul>

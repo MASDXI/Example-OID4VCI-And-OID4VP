@@ -55,10 +55,10 @@ export const Login = () => {
       <div className="hidden md:flex md:w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 justify-around items-center">
         <div>
           <h1 className="text-white font-bold text-4xl font-sans">
-            Digital Wallet
+            JustKept Wallet
           </h1>
           <p className="text-white mt-1">
-            The most popular wallet that everyone wants to use.
+            JustKept is digital wallet for receive and share credentials.
           </p>
         </div>
       </div>
@@ -68,7 +68,7 @@ export const Login = () => {
             Hello Again!
           </h1>
           <p className="text-sm font-normal text-gray-600 mb-7 text-center md:text-left">
-            Welcome to Digital Wallet.
+            Welcome to JustKept Wallet.
           </p>
           <button
             type="button"

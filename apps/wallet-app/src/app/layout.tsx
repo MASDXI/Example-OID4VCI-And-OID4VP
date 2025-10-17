@@ -8,8 +8,8 @@ import ReactQueryProvider from "@/utils/ReactQueryProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Digital Wallet",
-  description: "Demo: receive and verify vc",
+  title: "JustKept Wallet",
+  description: "Demonstrate Digital Wallet for holder to receive and resolve proof request of verifiable credential",
 };
 
 export default function RootLayout({
