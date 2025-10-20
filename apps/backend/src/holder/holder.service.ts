@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Holder } from 'src/agent/holder';
 import { PrismaService } from 'prisma/prisma.service';
-import { OpenId4VciResolvedCredentialOffer } from '@credo-ts/openid4vc';
+import { OpenId4VciResolvedCredentialOffer, OpenId4VcSiopResolvedAuthorizationRequest } from '@credo-ts/openid4vc';
 
 @Injectable()
 export class HolderService {
@@ -187,5 +187,9 @@ export class HolderService {
 
     async resolveProofRequest(proofRequest: string) {
         return await this.holder.resolveProofRequest(proofRequest);
+    }
+
+    async acceptPresentation(resolvedPresentationRequest: OpenId4VcSiopResolvedAuthorizationRequest) {
+        return await this.holder.acceptPresentationRequest(resolvedPresentationRequest);
     }
 }

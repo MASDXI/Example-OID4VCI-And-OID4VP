@@ -9,17 +9,21 @@ import { Fragment } from "react";
 
 interface Props {
   isOpen: boolean;
+  headerText: string;
+  bodyText: string;
   handleCloseModal: () => void;
   handleSetUri: (uri: string) => void;
-  handleReceiveCredential: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleConfirmation: (event: React.FormEvent<HTMLFormElement>) => void;
   uri: string;
 }
 
 export const Modal = ({
   isOpen,
+  headerText,
+  bodyText,
   handleCloseModal,
   handleSetUri,
-  handleReceiveCredential,
+  handleConfirmation,
   uri,
 }: Props) => {
   return (
@@ -54,12 +58,12 @@ export const Modal = ({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Receive Credential
+                    {headerText}
                   </DialogTitle>
-                  <form onSubmit={handleReceiveCredential}>
+                  <form onSubmit={handleConfirmation}>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Paste the credential offer URI.
+                        {bodyText}
                       </p>
                     </div>
                     <div className="mt-2">
@@ -84,7 +88,7 @@ export const Modal = ({
                         type="submit"
                         className="inline-flex justify-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
                       >
-                        Receive Credential
+                        Confirm
                       </button>
                     </div>
                   </form>

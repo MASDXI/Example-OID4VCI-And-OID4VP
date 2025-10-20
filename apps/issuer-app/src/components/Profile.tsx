@@ -7,7 +7,9 @@ import {
   faFileSignature,
   faHistory,
   faUserGraduate,
+  faCopy,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { User } from "../hooks/useGetUser";
 import useGetVC from "../hooks/useGetVC";
 import { decodeOpenIDUrl } from "@/app/lib/decodeOpenIDUrl";
@@ -19,6 +21,7 @@ export const Profile: React.FC<User> = (props: User) => {
   const { vc, handleRequestVc } = useGetVC();
   const { Canvas } = useQRCode();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleOpenModal = async () => {
     await handleRequestVc(); // fetch VC
@@ -26,6 +29,14 @@ export const Profile: React.FC<User> = (props: User) => {
   };
 
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleCopyVC = () => {
+    if (vc) {
+      navigator.clipboard.writeText(decodeOpenIDUrl(vc));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <div>
@@ -110,8 +121,21 @@ export const Profile: React.FC<User> = (props: User) => {
                     }}
                   />
                 </div>
-                <div className="border rounded-lg px-4 py-2 text-center break-words">
-                  <p className="text-sm text-black">{decodeOpenIDUrl(vc)}</p>
+
+                {/* Copyable decoded VC */}
+                <div
+                  className="w-full relative border rounded-lg px-4 py-2 text-center break-words cursor-pointer hover:bg-gray-100 transition flex items-center justify-center gap-2"
+                  onClick={handleCopyVC}
+                >
+                  <p className="text-black text-xs font-light truncate">
+                    {decodeOpenIDUrl(vc)}
+                  </p>
+                  <FontAwesomeIcon icon={faCopy} className="text-gray-400 text-sm" />
+                  {copied && (
+                    <span className="absolute top-1 right-2 text-green-500 text-xs">
+                      Copied!
+                    </span>
+                  )}
                 </div>
               </>
             ) : (

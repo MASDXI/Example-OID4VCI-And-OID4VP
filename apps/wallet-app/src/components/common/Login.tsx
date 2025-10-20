@@ -52,13 +52,13 @@ export const Login = () => {
 
   return (
     <div className="h-screen flex">
-      <div className="hidden md:flex md:w-1/2 bg-[#4682B4] justify-around items-center">
+      <div className="hidden md:flex md:w-1/2 main-color justify-around items-center">
         <div>
           <h1 className="text-white font-bold text-4xl font-sans">
-            Docs Wallet
+            DOCS Wallet
           </h1>
           <p className="text-white mt-1">
-            Docs is digital wallet for receive and share credentials.
+            DOCS is digital wallet for receive and share credentials.
           </p>
         </div>
       </div>
@@ -68,7 +68,7 @@ export const Login = () => {
             Hello Again!
           </h1>
           <p className="text-sm font-normal text-gray-600 mb-7 text-center md:text-left">
-            Welcome to Docs Wallet.
+            Welcome to DOCS Wallet.
           </p>
           <button
             type="button"

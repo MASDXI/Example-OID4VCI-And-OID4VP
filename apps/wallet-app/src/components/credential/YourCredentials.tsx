@@ -20,7 +20,7 @@ export const YourCredentials = () => {
   const { handleRequestCredentials } = useGetCredentials();
   const queryClient = useQueryClient();
 
-  const { data: credentialsOffer, isLoading: credentialsOfferLoding } =
+  const { data: credentialsOffer, isLoading: credentialsOfferLoading } =
     useQuery({
       queryFn: async () => await handleRequestCredentialOffer(),
       queryKey: ["credentialOffer"],
@@ -43,7 +43,7 @@ export const YourCredentials = () => {
     handleModal();
   };
 
-  if (credentialsOfferLoding || credentialsLoading) {
+  if (credentialsOfferLoading || credentialsLoading) {
     return <Loading />;
   }
 
@@ -59,9 +59,11 @@ export const YourCredentials = () => {
         </button>
         <Modal
           isOpen={isOpen}
+          headerText={"Receiving Credential"}
+          bodyText={"Paste the credential offer URI."}
           handleCloseModal={handleModal}
           handleSetUri={setUri}
-          handleReceiveCredential={handleReceiveCredential}
+          handleConfirmation={handleReceiveCredential}
           uri={uri}
         />
       </div>

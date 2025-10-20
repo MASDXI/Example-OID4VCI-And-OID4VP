@@ -74,7 +74,7 @@ export const ProofPage: React.FC = () => {
               </div>
             </div>
           ) : (
-            <p className="text-gray-500 text-sm mt-4">Generating proof...</p>
+            <p className="text-gray-500 text-sm mt-4">Generating proof request...</p>
           )}
         </div>
       </div>

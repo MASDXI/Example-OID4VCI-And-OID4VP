@@ -13,7 +13,24 @@ export class HolderController {
     async resolveProofRequest(@Body() body, @Res() res) {
         const { proofRequest } = body;
         try {
-            const data = await this.holderService.resolveProofRequest(proofRequest);
+            const resolvedProofRequest = await this.holderService.resolveProofRequest(proofRequest);
+            const data = await this.holderService.acceptPresentation(resolvedProofRequest);
+            console.log("🚀 ~ HolderController ~ resolveProofRequest ~ x:", data.body)
+            return res.status(HttpStatus.OK).json(data);
+        } catch (error) {
+            console.log(error);
+            if (error instanceof NotFoundException) {
+                return res.status(HttpStatus.NOT_FOUND).json({ message: 'NotFoundException' });
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'INTERNAL_SERVER_ERROR' });
+        }
+    }
+
+    @Post('accept-presentation')
+    async acceptPresentation(@Body() Body, @Res() res) {
+        const { resolvedPresentationRequest } = Body;
+        try {
+            const data = await this.holderService.acceptPresentation(resolvedPresentationRequest);
             return res.status(HttpStatus.OK).json(data);
         } catch (error) {
             console.log(error);
