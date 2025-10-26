@@ -44,7 +44,7 @@ export const NavBar = () => {
           <div className="flex items-center gap-4">
             <div className="sm:flex">
               <button
-                className="block rounded-md bg-gray-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-[#fa9e89]"
+                className="block rounded-md bg-gray-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-600"
                 onClick={() => signOut({ redirect: true, callbackUrl: "/" })}
               >
                 Logout

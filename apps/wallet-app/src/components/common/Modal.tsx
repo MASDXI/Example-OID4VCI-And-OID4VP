@@ -6,6 +6,7 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { Fragment } from "react";
+import { QRScanner } from "./QrScanner";
 
 interface Props {
   isOpen: boolean;
@@ -60,11 +61,10 @@ export const Modal = ({
                   >
                     {headerText}
                   </DialogTitle>
+                  <QRScanner onScanResult={(value) => handleSetUri(value)} />
                   <form onSubmit={handleConfirmation}>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {bodyText}
-                      </p>
+                      <p className="text-sm text-gray-500">{bodyText}</p>
                     </div>
                     <div className="mt-2">
                       <textarea

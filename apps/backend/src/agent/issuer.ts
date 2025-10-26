@@ -108,7 +108,7 @@ export class Issuer extends BaseAgent<{
             modules: {
                 askar: new AskarModule({ ariesAskar }),
                 openId4VcIssuer: new OpenId4VcIssuerModule({
-                    baseUrl: `http://172.27.224.176:${port}/issuer/oid4vci`,
+                    baseUrl: `http://localhost:${port}/issuer/oid4vci`,
                     router: customRouterIssuer,
                     endpoints: {
                         credential: {

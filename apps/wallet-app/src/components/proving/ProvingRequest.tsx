@@ -5,6 +5,7 @@ import { Modal } from "../common/Modal";
 import useResolveProofRequest from "@/hooks/useResolveProofRequest";
 import { useModal } from "@/hooks/useModal";
 import { Dialog, DialogPanel, DialogTitle, Transition } from "@headlessui/react";
+import { QRScanner } from "../common/QrScanner";
 
 export const Proving = () => {
   const [uri, setUri] = useState<string>("");
@@ -46,7 +47,7 @@ export const Proving = () => {
 
         <button
           onClick={handleModal}
-          className="bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 rounded-md px-5 py-2.5"
+          className="bg-gray-600 text-white text-sm font-medium hover:bg-gray-500 rounded-md px-5 py-2.5"
         >
           Proving Request
         </button>

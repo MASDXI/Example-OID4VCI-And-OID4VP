@@ -53,7 +53,7 @@ export const YourCredentials = () => {
         <h2 className="font-bold text-2xl font-sans">Your Credentials</h2>
         <button
           onClick={handleModal}
-          className="bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 rounded-md px-5 py-2.5"
+          className="bg-gray-600 text-white text-sm font-medium hover:bg-gray-500 rounded-md px-5 py-2.5"
         >
           Receive credentials
         </button>
