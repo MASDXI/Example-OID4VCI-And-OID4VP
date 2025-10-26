@@ -19,9 +19,9 @@ export class HolderService {
         console.info('Holder Build Success');
     }
 
-    async resolveCredentialOffer(credentialOffer: string, address: string) {
+    async resolveCredentialOffer(credentialOffer: string, email: string) {
         const holder = await this.prisma.holder.findUnique({
-            where: { id: address },
+            where: { id: email },
         });
 
         if (!holder) {
@@ -44,12 +44,12 @@ export class HolderService {
         return metadata;
     }
 
-    async rejectCredential(address: string, id: string) {
+    async rejectCredential(email: string, id: string) {
         try {
             await this.prisma.credentialOffer.delete({
                 where: {
                     id,
-                    holderId: address,
+                    holderId: email,
                 },
             });
         } catch (error) {
@@ -60,12 +60,12 @@ export class HolderService {
         }
     }
 
-    async deleteCredential(address: string, id: string) {
+    async deleteCredential(email: string, id: string) {
         try {
             await this.prisma.credential.delete({
                 where: {
                     id,
-                    holderId: address,
+                    holderId: email,
                 },
             });
         } catch (error) {
@@ -76,10 +76,10 @@ export class HolderService {
         }
     }
 
-    async getCredentialOfferByAddress(address: string) {
+    async getCredentialOfferByEmail(email: string) {
         const holder = await this.prisma.holder.findUniqueOrThrow({
             where: {
-                id: address,
+                id: email,
             },
             include: {
                 credentialOffer: true,
@@ -104,10 +104,10 @@ export class HolderService {
         return credentialOffers;
     }
 
-    async getCredentialsByAddress(address: string) {
+    async getCredentialsByEmail(email: string) {
         const credentials = await this.prisma.credential.findMany({
             where: {
-                holderId: address,
+                holderId: email,
             },
         });
 
@@ -123,11 +123,11 @@ export class HolderService {
         return credentialObject;
     }
 
-    async getCredentialByAddress(id: string, address: string) {
+    async getCredentialByEmail(id: string, email: string) {
         const credential = await this.prisma.credential.findUnique({
             where: {
                 id,
-                holderId: address,
+                holderId: email,
             },
         });
 
@@ -137,10 +137,10 @@ export class HolderService {
         return { id: credential.id, ...credentialObject };
     }
 
-    async acceptCredentialOffer(address: string, credentialOfferId: string): Promise<any> {
+    async acceptCredentialOffer(email: string, credentialOfferId: string): Promise<any> {
         try {
             const credentialOffer = await this.prisma.credentialOffer.findUniqueOrThrow({
-                where: { id: credentialOfferId, holderId: address },
+                where: { id: credentialOfferId, holderId: email },
             });
 
             const decodedString = credentialOffer.metadata.toString('utf-8');
@@ -166,7 +166,7 @@ export class HolderService {
                     data: {
                         credential: bufferCredential,
                         metadata: bufferPrettyClaim,
-                        holderId: address,
+                        holderId: email,
                     },
                 }),
                 this.prisma.credentialOffer.update({

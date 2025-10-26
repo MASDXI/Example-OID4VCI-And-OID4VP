@@ -10,7 +10,7 @@ const useResolveCredential = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ payload: uri, address: data?.user?.name }),
+      body: JSON.stringify({ payload: uri, email: data?.user?.name }),
     });
 
     if (response.ok) {

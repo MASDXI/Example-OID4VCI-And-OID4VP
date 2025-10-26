@@ -1,53 +1,57 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Ethereum",
+      name: "Credentials",
       credentials: {
-        message: { label: "Message", type: "text", placeholder: "0x0" },
-        signature: { label: "Signature", type: "text", placeholder: "0x0" },
+        email: { label: "Email", type: "email", placeholder: "you@example.com" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Missing email or password");
+        }
+
         try {
-          const nextAuthUrl = new URL(process.env.NEXTAUTH_URL!);
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_HOLDER_URL}/signIn`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                message: credentials?.message,
-                signature: credentials?.signature,
-                domain: nextAuthUrl.host,
-              }),
-            }
-          );
+          const res = await fetch(`${process.env.NEXT_PUBLIC_HOLDER_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          });
 
           const data = await res.json();
+          console.log("🚀 ~ data:", data)
 
-          if (res.ok && data.address) {
-            return { id: data.address };
+          // Expected response from backend:
+          // { user: { id: 'johndoe@example.xyz', email: 'johndoe@example.xyz' } }
+          if (res.ok && data.user) {
+            return { id: data.user};
           }
 
           return null;
-        } catch (e) {
+        } catch (error) {
+          console.error("Login error:", error);
           return null;
         }
       },
     }),
   ],
+
   session: {
     strategy: "jwt",
-    maxAge: 1 * 24 * 60 * 60, // 1 day
+    maxAge: 24 * 60 * 60, // 1 day
   },
+
   secret: process.env.NEXTAUTH_SECRET,
+
   callbacks: {
     async session({ session, token }: { session: any; token: any }) {
-      session.address = token.sub;
+      session.email = token.sub;
       session.user.name = token.sub;
       session.user.image = "https://www.fillmurray.com/128/128";
       return session;

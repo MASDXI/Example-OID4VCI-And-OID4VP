@@ -1,82 +1,81 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { SiweMessage } from "siwe";
-import { BrowserProvider } from "ethers";
+import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 
 export const Login = () => {
-  const [provider, setProvider] = useState<any>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.ethereum) {
-      setProvider(new BrowserProvider(window.ethereum));
-    }
-  }, []);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const createSiweMessage = async (address: string, statement: string) => {
-    const message = new SiweMessage({
-      domain: window.location.host,
-      address,
-      statement,
-      uri: window.location.origin,
-      version: "1",
-      chainId: 1,
+    setError(null); // clear previous errors
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+      callbackUrl: "/",
     });
-    return message.prepareMessage();
-  };
 
-  const signInWithEthereum = async () => {
-    try {
-      const signer = await provider.getSigner();
-      const address = await signer.getAddress();
-
-      const message = await createSiweMessage(
-        address,
-        "Sign in with Ethereum to the app."
-      );
-
-      const signature = await signer.signMessage(message);
-
-      signIn("credentials", {
-        message: JSON.stringify(message),
-        redirect: false,
-        signature,
-        callbackUrl: "/",
-      });
-    } catch (error) {
-      console.error("Error signing in with Ethereum:", error);
-      window.alert(error);
+    if (res?.error) {
+      setError("Invalid email or password");
     }
   };
 
   return (
     <div className="h-screen flex">
+      {/* Left side / marketing */}
       <div className="hidden md:flex md:w-1/2 main-color justify-around items-center">
         <div>
-          <h1 className="text-white font-bold text-4xl font-sans">
-            DOCS Wallet
-          </h1>
+          <h1 className="text-white font-bold text-4xl font-sans">DOCS Wallet</h1>
           <p className="text-white mt-1">
-            DOCS is digital wallet for receive and share credentials.
+            DOCS is a digital wallet for receiving and sharing credentials.
           </p>
         </div>
       </div>
+
+      {/* Right side / login form */}
       <div className="flex w-full md:w-1/2 justify-center items-center bg-white">
-        <div className="bg-white">
+        <div className="w-full max-w-md p-6">
           <h1 className="text-gray-800 font-bold text-2xl mb-1 text-center md:text-left">
-            Hello Again!
+            Welcome Back!
           </h1>
           <p className="text-sm font-normal text-gray-600 mb-7 text-center md:text-left">
-            Welcome to DOCS Wallet.
+            Login to DOCS Wallet.
           </p>
-          <button
-            type="button"
-            className="block w-full bg-indigo-600 mt-4 py-2 px-5 rounded-2xl text-white font-semibold mb-2"
-            onClick={signInWithEthereum}
-          >
-            Sign-In with Ethereum
-          </button>
+
+          {error && (
+            <p className="text-red-600 text-sm mb-4 text-center">{error}</p>
+          )}
+
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="border rounded-2xl py-2 px-4 focus:outline-none focus:ring-2 focus:main-color"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="border rounded-2xl py-2 px-4 focus:outline-none focus:ring-2 focus:main-color"
+            />
+
+            <button
+              type="submit"
+              className="block w-full bg-gray-700 mt-2 py-2 px-5 rounded-2xl text-white font-semibold hover:bg-gray-600"
+            >
+              Sign-In
+            </button>
+          </form>
         </div>
       </div>
     </div>

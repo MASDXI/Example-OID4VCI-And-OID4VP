@@ -10,7 +10,7 @@ const useReceiveCredential = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ credentialOfferId, address: data?.user?.name }),
+      body: JSON.stringify({ credentialOfferId, email: data?.user?.name }),
     });
 
     if (response.ok) {

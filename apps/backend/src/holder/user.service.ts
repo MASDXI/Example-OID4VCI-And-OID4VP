@@ -1,42 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { SiweMessage } from 'siwe';
+import * as mockUser from './mocks/mock-data-holder.json';
+
+interface MockUser {
+  email: string;
+  password: string;
+}
 
 @Injectable()
 export class UserService {
-    constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
-    async signIn(message: string, signature: string, domain: string) {
-        const siwe = new SiweMessage(JSON.parse(message || '{}'));
+  async validateUser(email: string, password: string) {
+    const user = mockUser as MockUser;
 
-        const result = await siwe.verify({
-            signature: signature || '',
-            domain,
-        });
+    if (user.email === email && user.password === password) {
+      // Check if holder exists
+      let holder = await this.prisma.holder.findUnique({
+        where: { id: email },
+      });
 
-        console.log(result.success);
+      if (holder) {
+        return holder.email;
+      }
 
-        if (result.success) {
-            console.log('verify');
-            const holder = await this.prisma.holder.findUnique({
-                where: { id: siwe.address },
-            });
-
-            if (holder) {
-                return holder.address;
-            }
-
-            const newHolder = await this.prisma.holder.create({
+      const newHolder = await this.prisma.holder.create({
                 data: {
-                    id: siwe.address,
-                    address: siwe.address,
+                    id: email,
+                    email: email,
                 },
             });
-            console.log(newHolder.address);
-
-            return newHolder.address;
-        }
-
-        return null;
+      return newHolder.email;
     }
+
+    throw new UnauthorizedException('Invalid email or password');
+  }
 }
