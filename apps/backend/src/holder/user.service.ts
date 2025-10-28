@@ -30,9 +30,11 @@ export class UserService {
                     email: email,
                 },
             });
-      return newHolder.email;
-    }
 
-    throw new UnauthorizedException('Invalid email or password');
+      console.log(newHolder);
+      return newHolder.email;
+    } else {
+      return null;
+    }
   }
 }
