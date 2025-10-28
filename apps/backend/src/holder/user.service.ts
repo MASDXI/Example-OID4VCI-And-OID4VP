@@ -33,8 +33,7 @@ export class UserService {
 
       console.log(newHolder);
       return newHolder.email;
-    } else {
-      return null;
     }
+    return null;
   }
 }

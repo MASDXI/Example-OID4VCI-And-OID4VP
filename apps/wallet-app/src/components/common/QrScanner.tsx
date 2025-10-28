@@ -13,7 +13,7 @@ export const QRScanner = ({ onScanResult }: QRScannerProps) => {
     if (!result) return;
 
     // handel allow QR codes starting with "openid4" only
-    if (result.startsWith("openid4")) {
+    if (result.startsWith("openid")) {
       if (onScanResult) onScanResult(result);
       setIsCameraOpen(false); // auto-close camera if passed
       setError(null);
