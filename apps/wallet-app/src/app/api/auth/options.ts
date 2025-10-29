@@ -25,12 +25,12 @@ export const authOptions: NextAuthOptions = {
           });
 
           const data = await res.json();
-          console.log("🚀 ~ data:", data)
 
           // Expected response from backend:
           // { user: { id: 'johndoe@example.xyz', email: 'johndoe@example.xyz' } }
-          if (res.ok && data.user) {
-            return { id: data.user};
+          if (res.ok && data.email) {
+            console.log("🚀 ~ data:", data.email)
+            return { id: data.email};
           }
 
           return null;
@@ -52,6 +52,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token }: { session: any; token: any }) {
       session.email = token.sub;
+      session.id = token.sub;
       session.user.name = token.sub;
       session.user.image = "https://www.fillmurray.com/128/128";
       return session;
