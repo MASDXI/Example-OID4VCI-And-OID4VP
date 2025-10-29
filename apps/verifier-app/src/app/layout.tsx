@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Sarabun } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
+const sarabun = Sarabun({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700"],
 });
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <body className={sarabun.className}>{children}</body>
     </html>
   );
 }

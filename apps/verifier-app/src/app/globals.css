@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.main-color{
+  background: #1a3d93
+}
+
+.text-main-color{
+  color:#1a3d93
+}

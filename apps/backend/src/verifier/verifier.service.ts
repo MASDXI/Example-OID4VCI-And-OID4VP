@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { presentationDefinitions, Verifier } from 'src/agent/verifier';
+import * as mockUser from './mocks/mock-data-issuer.json';
 
 @Injectable()
 export class VerifierService {
@@ -18,5 +19,21 @@ export class VerifierService {
         const presentationDefinition = presentationDefinitions.find((p) => p.id === id);
 
         return this.verifier.createProofRequest(presentationDefinition);
+    }
+
+    async validateUser(idCardNumber: number, password: string) {
+        if (Number(mockUser.idcardnumber) === idCardNumber && mockUser.password === password) {
+            return mockUser;
+        } else {
+            throw new UnauthorizedException('Invalid email or password');
+        }
+    }
+
+    async getUserById(id: string) {
+        if (mockUser.id === id) {
+            return mockUser;
+        } else {
+            throw new NotFoundException(`User with ID ${id} not found`);
+        }
     }
 }

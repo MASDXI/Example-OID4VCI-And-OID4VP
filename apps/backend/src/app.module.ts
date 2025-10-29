@@ -5,6 +5,7 @@ import { IssuerModule } from './issuer/issuer.module';
 import { ConfigModule } from '@nestjs/config';
 import { HolderModule } from './holder/holder.module';
 import { VerifierModule } from './verifier/verifier.module';
+import { ExamRegisterModule } from './verifier/exam/exam.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -16,6 +17,7 @@ import configuration from './config/configuration';
         }),
         HolderModule,
         VerifierModule,
+        ExamRegisterModule,
     ],
     controllers: [AppController],
     providers: [AppService],

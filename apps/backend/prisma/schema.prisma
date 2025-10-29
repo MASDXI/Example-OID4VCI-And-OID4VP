@@ -18,6 +18,7 @@ model Holder {
   email           String            @unique
   credentialOffer CredentialOffer[]
   Credential      Credential[]
+  ExamRegister ExamRegister[]
 }
 
 model CredentialOffer {
@@ -34,4 +35,39 @@ model Credential {
   metadata   Bytes
   holder     Holder? @relation(fields: [holderId], references: [id])
   holderId   String?
+}
+
+model ExamRegister {
+  id               String   @id @default(cuid())
+  registrationCode String   @unique
+  fullName         String
+  email            String
+  phone            String
+  dateOfBirth      DateTime
+  nationality      String
+  idCardNumber     String   @unique
+
+  // Address
+  address    String
+  city       String
+  state      String
+  postalCode String
+  country    String @default("Thailand")
+
+  // Registration Status
+  status String @default("Submitted") // "Submitted", "Verified", "Approved", "Rejected", "Completed"
+
+  // Documents
+  verifiableCredentialVerified Boolean @default(false)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  holder   Holder? @relation(fields: [holderId], references: [id])
+  holderId String?
+
+  @@index([email])
+  @@index([status])
 }
